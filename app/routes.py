@@ -35,36 +35,36 @@ def plot_png():
     return Response(output.getvalue(), mimetype='image/png')
 
 
-def create_figure():
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
-    xs = [1,2,3,4]
-    ys = [1,2,3,4]
-    axis.scatter(xs, ys)
-    return fig
-# def create_figure(final_data, days):
-#     '''
-#     takes a feature array and plots it against the time index and 
-#     time_span = days.unique
-#     converts minutes in integer form into into a clock reading for ease of translation
-#     '''
-#     fig = Figure(figsize=(30,15*days))
-#     x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
-#     for day in range(days):
-#         axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
-#         axis.plot(x, final_data[day+1].Output, label='Photovoltaic Energy Produced',
-#                     color='orange', fillstyle='bottom')
-#         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
-#         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
-#         axis.legend(loc='upper left')
-#         axis.set_title(f'Day {day+1}', fontdict = {'fontsize' : 24}, loc= 'left')
-#         for tick in axis.xaxis.get_major_ticks():
-#             tick.label.set_fontsize(14) 
-#             tick.label.set_rotation('vertical')
-#         for tick in axis.yaxis.get_major_ticks():
-#             tick.label.set_fontsize(22) 
-
+# def create_figure():
+#     fig = Figure()
+#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
+#     xs = [1,2,3,4]
+#     ys = [1,2,3,4]
+#     axis.scatter(xs, ys)
 #     return fig
+def create_figure(final_data, days):
+    '''
+    takes a feature array and plots it against the time index and 
+    time_span = days.unique
+    converts minutes in integer form into into a clock reading for ease of translation
+    '''
+    fig = Figure(figsize=(30,15*days))
+    x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
+    for day in range(days):
+        axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
+        axis.plot(x, final_data[day+1].Output, label='Photovoltaic Energy Produced',
+                    color='orange', fillstyle='bottom')
+        axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
+        axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
+        axis.legend(loc='upper left')
+        axis.set_title(f'Day {day+1}', fontdict = {'fontsize' : 24}, loc= 'left')
+        for tick in axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(14) 
+            tick.label.set_rotation('vertical')
+        for tick in axis.yaxis.get_major_ticks():
+            tick.label.set_fontsize(22) 
+
+    return fig
 
 
 
@@ -97,67 +97,6 @@ def create_figure():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # @app.route('/plot')
 # def plot(chartID = 'chart_ID', chart_type = 'bar', chart_height = 350):
 # 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
@@ -166,7 +105,3 @@ def create_figure():
 # 	xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
 # 	yAxis = {"title": {"text": 'yAxis Label'}}
 # 	return render_template('plt.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
-
-
-
-
