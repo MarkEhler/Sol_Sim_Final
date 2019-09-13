@@ -12,9 +12,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 def form():
 	form = SimForm()
 	if form.validate_on_submit():
-		# date_ = form.date.data
-		# location_ = form.location.data
-		# time_span_ = form.time_span.data
 		flash(f'Building graph for {form.time_span.data} days...') #success, add css
 		return redirect(url_for('results'))
 	return render_template('form.html', title='Check Yo Place!', form=form)
@@ -28,15 +25,6 @@ def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
 	day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
 	return render_template('results.html', title=' sunny day(s)')
-
-
-
-
-
-
-
-
-
 
 
 @app.route('/plot.png')
