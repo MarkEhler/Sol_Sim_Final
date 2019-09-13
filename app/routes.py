@@ -24,15 +24,15 @@ def about():
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
 	day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
-	return render_template('results.html', day_dict=day_dict, title=' sunny day(s)'), day_dict
+	return render_template('results.html', day_dict=day_dict, title=' sunny day(s)')
 
 
 @app.route('/plot.png')
 def plot_png():
     fig = create_figure(day_dict, int(request.form['time_span'])) # 
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+    plot = io.BytesIO()
+    FigureCanvas(fig).print_png(plot)
+    return Response(plot.getvalue(), mimetype='image/png')
 
 
 def create_figure(final_data, days):
