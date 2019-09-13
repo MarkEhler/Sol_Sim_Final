@@ -29,19 +29,12 @@ def handle_data():
 
 @app.route('/plot.png')
 def plot_png():
-    fig = create_figure(day_dict, int(request.form['time_span'])) # 
+    fig = create_figure(request.day_dict, int(request.form['time_span'])) # 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
 
-# def create_figure():
-#     fig = Figure()
-#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
-#     xs = [1,2,3,4]
-#     ys = [1,2,3,4]
-#     axis.scatter(xs, ys)
-#     return fig
 def create_figure(final_data, days):
     '''
     takes a feature array and plots it against the time index and 
@@ -70,7 +63,13 @@ def create_figure(final_data, days):
 
 
 
-
+# def create_figure():
+#     fig = Figure()
+#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
+#     xs = [1,2,3,4]
+#     ys = [1,2,3,4]
+#     axis.scatter(xs, ys)
+#     return fig
 
 
 
