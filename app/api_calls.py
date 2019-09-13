@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
+
 #geolocation package
 from opencage.geocoder import OpenCageGeocode
 
@@ -11,6 +12,9 @@ import json
 from time import sleep, strftime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+# Visuals
+from matplotlib.figure import Figure
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -422,7 +426,30 @@ def process(final_data, days, sunrise, sunset):
 
 # # Visualize Results
 
+def create_figure(final_data, days):
+    '''
+    takes a feature array and plots it against the time index and 
+    time_span = days.unique
+    converts minutes in integer form into into a clock reading for ease of translation
+    '''
+    plt.style.use('seaborn')
+    fig = Figure(figsize=(30,15*days))
+    x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
+    for day in range(days):
+        axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
+        axis.plot(x, final_data[day+1].Output, label='Photovoltaic Energy Produced',
+                    color='orange', fillstyle='bottom')
+        axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
+        axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
+        axis.legend(loc='upper left')
+        axis.set_title(f'Day {day+1}', fontdict = {'fontsize' : 24}, loc= 'left')
+        for tick in axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(14) 
+            tick.label.set_rotation('vertical')
+        for tick in axis.yaxis.get_major_ticks():
+            tick.label.set_fontsize(22) 
 
+    return fig
 
 
 def daily_avg(results_series, sunrise, sunset):

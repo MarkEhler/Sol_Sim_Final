@@ -1,13 +1,11 @@
-from flask import render_template, flash, redirect, url_for, send_file, request, Response
+from flask import render_template, flash, redirect, url_for, request, Response
 from app import app
 from app.forms import SimForm
 from app.api_calls import *
-import time
-from io import StringIO
-import io, random
+import time, io
 # draw figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+
 
 @app.route('/')
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -43,36 +41,12 @@ def handle_data():
 
 @app.route('/plot.png')
 def plot_png():
-    fig = create_figure()
+    fig = create_figure(day_dict, int(request.form['time_span']))
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
-def create_figure(final_data, days):
-	    '''
-    takes a feature array and plots it against the time index and 
-    time_span = days.unique
-    converts minutes in integer form into into a clock reading for ease of translation
-    '''
-    plt.style.use('seaborn')
-    fig = Figure(figsize=(30,15*days))
-    # canvas = FigureCanvas(fig)
-    x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
-    for day in range(days):
-        axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
-        axis.plot(x, final_data[day+1].Output, label='Photovoltaic Energy Produced',
-                    color='orange', fillstyle='bottom')
-        axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
-        axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
-        axis.legend(loc='upper left')
-        axis.set_title(f'Day {day+1}', fontdict = {'fontsize' : 24}, loc= 'left')
-        for tick in axis.xaxis.get_major_ticks():
-            tick.label.set_fontsize(14) 
-            tick.label.set_rotation('vertical')
-        for tick in axis.yaxis.get_major_ticks():
-            tick.label.set_fontsize(22) 
 
-    return fig
 
 
 
