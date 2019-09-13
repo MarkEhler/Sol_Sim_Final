@@ -29,7 +29,7 @@ def handle_data():
 
 @app.route('/plot.png')
 def plot_png():
-    fig = create_figure(day_dict, int(request.form['time_span']))
+    fig = create_figure() # day_dict, int(request.form['time_span'])
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
