@@ -432,7 +432,6 @@ def create_figure(final_data, days):
     time_span = days.unique
     converts minutes in integer form into into a clock reading for ease of translation
     '''
-    plt.style.use('seaborn')
     fig = Figure(figsize=(30,15*days))
     x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
     for day in range(days):
