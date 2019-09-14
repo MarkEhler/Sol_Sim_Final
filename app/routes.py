@@ -27,9 +27,9 @@ def handle_data():
 	return render_template('results.html', day_dict=day_dict, title=' sunny day(s)')
 
 
-@app.route('/plot.png')
+@app.route('/plot.png', methods=['GET', 'POST'])
 def plot_png():
-    fig = create_figure(day_dict, int(request.form['time_span'])) # use **kwargs?
+    fig = create_figure(request.get(day_dict), int(request.form['time_span'])) # use **kwargs?
     plot = io.BytesIO()
     FigureCanvas(fig).print_png(plot)
     return Response(plot.getvalue(), mimetype='image/png')
@@ -57,7 +57,7 @@ def create_figure(final_data, days):
         for tick in axis.yaxis.get_major_ticks():
             tick.label.set_fontsize(22) 
 
-    return fig
+    return render_template(fig=fig)
 
 
 
