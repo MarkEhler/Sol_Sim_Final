@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
+import keys
+import os
 
 #geolocation package
 from opencage.geocoder import OpenCageGeocode
@@ -23,10 +25,10 @@ chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 # Retrieve set environment variables
-DarkSkyKey = "67ea5b58bde0e53adb5d1b0cf7c94395"
-OpenCageKey = "227274f48bf449628de5ceeeacfbf6a7"
-# DarkSkyKey = os.environ.get('DarkSky')
-# OpenCageKey = os.environ.get('OpenCage')
+# DarkSkyKey = "67ea5b58bde0e53adb5d1b0cf7c94395"
+# OpenCageKey = "227274f48bf449628de5ceeeacfbf6a7"
+DarkSkyKey = os.environ.get('DarkSky')
+OpenCageKey = os.environ.get('OpenCage')
 
 
 
