@@ -17,20 +17,14 @@ from selenium.webdriver.common.keys import Keys
 # Visuals
 from matplotlib.figure import Figure
 
+# Retrieve and set environment variables
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-
-# Retrieve set environment variables
 DarkSkyKey = os.environ.get("DS_KEY")
 OpenCageKey = os.environ.get("OC_KEY")
-# DarkSkyKey = os.environ.get('DarkSky')
-# OpenCageKey = os.environ.get('OpenCage')
-
-
-
 
 
 # Time Fx

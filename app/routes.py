@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, Response
 from app import app
 from app.forms import SimForm
-
+from app.api_calls import *
 # draw figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
@@ -11,11 +11,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 def form():
 	form = SimForm()
 	if form.validate_on_submit():
-		flash(f'Building graph for {form.time_span.data} days...') #success, add css
+		flash(f'Building graph for {form.time_span.data} days...')
 		return redirect(url_for('results'))
 	return render_template('form.html', title='Check Yo Place!', form=form)
-
-from app.api_calls import *
 
 @app.route('/about', methods=['GET', 'POST'])
 def about():
@@ -23,9 +21,9 @@ def about():
 
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
-	# output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-	# day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
-	return render_template('results.html', title=' sunny day(s)') # , day_dict=day_dict
+	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
+	day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
+	return render_template('results.html', title=f'{request.form['time_span']} sunny day(s)') # , day_dict=day_dict
 
 
 @app.route('/plot.png', methods=['GET', 'POST'])
