@@ -22,15 +22,14 @@ def about():
 
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
-	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-	day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
+	# output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
+	# day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
 	return render_template('results.html', day_dict=day_dict, title=' sunny day(s)')
 
 
 @app.route('/plot.png', methods=['GET', 'POST'])
 def plot_png():
-    fig = create_figure(request.get(day_dict), int(request.form['time_span'])) # use **kwargs?
-    plot = io.BytesIO()
+    fig = create_figure(day_dict, int(request.form['time_span']))
     FigureCanvas(fig).print_png(plot)
     return Response(plot.getvalue(), mimetype='image/png')
 

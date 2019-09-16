@@ -25,8 +25,8 @@ chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 # Retrieve set environment variables
-DarkSkyKey = "67ea5b58bde0e53adb5d1b0cf7c94395"
-OpenCageKey = "227274f48bf449628de5ceeeacfbf6a7"
+DarkSkyKey = os.environ.get("DS_KEY")
+OpenCageKey = os.environ.get("OC_KEY")
 # DarkSkyKey = os.environ.get('DarkSky')
 # OpenCageKey = os.environ.get('OpenCage')
 
@@ -446,8 +446,12 @@ def daily_avg(results_series, sunrise, sunset):
     for_avg = results_array[pre_dawn:after_dusk]
     avg = for_avg.mean()
     return avg
-    
 
+# # # # #
+
+
+output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
+day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
 
 
 
@@ -469,3 +473,6 @@ def run_sim(time_span, location, date):
         mean_power[day] = daily_avg(day_dict[day+1].Output, sunrise, sunset)
         
     return mean_power
+
+
+# # # # #
