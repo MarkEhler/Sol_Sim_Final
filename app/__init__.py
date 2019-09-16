@@ -8,5 +8,4 @@ app.config.from_object(Config)
 bootstrap = Bootstrap(app)
 
 
-
 from app import routes, errors
