@@ -2,9 +2,8 @@ import requests, os, datetime, pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import pickle
-# from app.keys import *
-import os
+import pickle, os
+from flask import request
 
 #geolocation package
 from opencage.geocoder import OpenCageGeocode

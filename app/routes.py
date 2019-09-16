@@ -2,7 +2,6 @@ from flask import render_template, flash, redirect, url_for, request, Response
 from app import app
 from app.forms import SimForm
 from app.api_calls import *
-import time, io
 # draw figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
