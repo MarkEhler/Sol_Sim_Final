@@ -449,10 +449,6 @@ def daily_avg(results_series, sunrise, sunset):
 # # # # #
 
 
-# output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-# day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
-
-
 
 
 # # # # #
@@ -465,13 +461,9 @@ def run_sim(time_span, location, date):
     '''
     output, sunrise, sunset = loop_data_collect(time_span, location, date)
     day_dict = process(output, time_span, sunrise, sunset)
-    # plot(day_dict, time_span, target_date)
-    # plot_features_day1(day_dict)
     mean_power = {}
     for day in range(time_span):
-        mean_power[day] = daily_avg(day_dict[day+1].Output, sunrise, sunset)
-        
-    return mean_power
-
+        mean_power[day] = daily_avg(day_dict[day+1].Output, sunrise, sunset)   
+    return mean_power, day_dict
 
 # # # # #
