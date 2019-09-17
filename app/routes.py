@@ -6,6 +6,8 @@ from app.api_calls import *
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
+session = ('day_dict': None)
+
 @app.route('/')
 @app.route('/dashboard', methods=['GET', 'POST'])
 def form():
@@ -22,8 +24,8 @@ def about():
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-    if request.method == 'POST':
-        session.pop('day_dict', None)
+    # if request.method == 'POST':
+    session.pop('day_dict', None)
 	session['day_dict'] = process(output, int(request.form['time_span']), sunrise, sunset)
 	return render_template('results.html', title='Sunny Day(s)') # , day_dict=day_dict
 
