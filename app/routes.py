@@ -25,7 +25,7 @@ def about():
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     # if request.method == 'POST':
-    session.pop('day_dict', None)
+    # session.pop('day_dict', None)
 	session['day_dict'] = process(output, int(request.form['time_span']), sunrise, sunset)
 	return render_template('results.html', title='Sunny Day(s)') # , day_dict=day_dict
 
