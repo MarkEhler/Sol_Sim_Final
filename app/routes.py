@@ -27,8 +27,7 @@ def handle_data():
     # if request.method == 'POST':
     # session.pop('listed', None)
 	listed = process(output, int(request.form['time_span']), sunrise, sunset)
-
-    session['listed'] = listed.to_json()
+    session['listed'] = listed
 	return render_template('results.html', title='Sunny Day(s)') # , listed=listed
 
 
