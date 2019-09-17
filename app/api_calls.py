@@ -391,10 +391,6 @@ def process(final_data, days, sunrise, sunset):
     days = int(days)
     cols = final_data.columns.to_list()
     feature_cols = cols[:5] + cols[-1:]
-    # # marker here -- OS is for local systems only
-    # BASE_PATH = os.path.dirname(__file__)
-    # model = os.path.join(BASE_PATH, 'static', 'day_model.pkl')
-    # scaler = os.path.join(BASE_PATH, 'static', 'day_scaler.pkl')
     model = os.path.join(os.getcwd(), 'app//static', 'final_model.pkl')
     scaler = os.path.join(os.getcwd(), 'app//static', 'final_scaler.pkl')
     loaded_day_model = pickle.load(open(model, 'rb'))
@@ -403,21 +399,28 @@ def process(final_data, days, sunrise, sunset):
     sunrise_minutes = (convert_minutes(sunrise, forward=True, seconds=True) // 15)
     sunset_minutes = (convert_minutes(sunset, forward=True, seconds=True) // 15)
        
-    day_dict = {}
-    for day in range(1,days+1):
-        day_dict[day] = final_data[final_data.Day == day]
-        feats = day_dict[day].loc[:,feature_cols]
-        features = loaded_day_scaler.transform(feats)
-        output = loaded_day_model.predict(features)
-    #     because the government site the zenith angle was scraped from does not distingush between degrees above the horizon (+)
-    #     and degrees below the horizon (-) there is a chance that some night time data will return a small positive number
-    #     what follows is a few manipulations to make sure night time data is silenced
-        output[:sunrise_minutes] = 0
-        output[sunset_minutes:] = 0
-        output = output.clip(min=0)
-        day_dict[day]['Output'] = output
+    feats = final_data.loc[:,feature_cols]
+    features = loaded_day_scaler.transform(feats)
+    output = loaded_day_model.predict(features)
+#     because the government site the zenith angle was scraped from does not distingush between degrees above the horizon (+)
+#     and degrees below the horizon (-) there is a chance that some night time data will return a small positive number
+#     in the most up-to-date itteration there doesn't seem to be much of a need for this but still, for safety
+    output = output.clip(min=0)
+    final_data['Output'] = output
+
+    dayz = final_data.Day.unique()
+    listed = []
+    for day in dayz:
+        day = final_data[final_data.Day == day]
+#         day[:sunrise_minutes] = 0
+#         day[sunset_minutes:] = 0
+        day = day.to_json()
+        listed.append(day)
+
     
-    return day_dict
+    return listed
+
+
 
 # # Visualize Results
 
@@ -438,7 +441,8 @@ def daily_avg(results_series, sunrise, sunset):
     after_dusk = int(round(sunset_minutes/15,0))
     for_avg = results_array[pre_dawn:after_dusk]
     avg = for_avg.mean()
-    return avg
+    mean_daily_produced = (for_avg/4)*avg
+    return avg, mean_daily_produced
 
 # # # # #
 

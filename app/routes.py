@@ -6,7 +6,7 @@ from app.api_calls import *
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-# session = ('day_dict': None)
+# session = ('listed': None)
 
 @app.route('/')
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -25,14 +25,16 @@ def about():
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     # if request.method == 'POST':
-    # session.pop('day_dict', None)
-	session['day_dict'] = process(output, int(request.form['time_span']), sunrise, sunset)
-	return render_template('results.html', title='Sunny Day(s)') # , day_dict=day_dict
+    # session.pop('listed', None)
+	listed = process(output, int(request.form['time_span']), sunrise, sunset)
+
+    session['listed'] = listed.to_json()
+	return render_template('results.html', title='Sunny Day(s)') # , listed=listed
 
 
 @app.route('/plot.png', methods=['GET', 'POST'])
 def plot_png():
-    fig = create_figure(session['day_dict'], int(request.form['time_span']))
+    fig = create_figure(session['listed'], int(request.form['time_span']))
     FigureCanvas(fig).print_png(plot)
     return Response(plot.getvalue(), mimetype='image/png')
 
@@ -43,11 +45,16 @@ def create_figure(final_data, days):
     time_span = days.unique
     converts minutes in integer form into into a clock reading for ease of translation
     '''
+    dataframes = []
+    for day in listed:
+        day = pd.read_json(day, orient='records')
+        day = day.sort_index()
+        dataframes.append(day)
     fig = Figure(figsize=(30,15*days))
-    x = [convert_minutes(time, forward=False, seconds=False) for time in final_data[1].index]
+    x = [convert_minutes(time, forward=False, seconds=False) for time in dataframes[1].index]
     for day in range(days):
         axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
-        axis.plot(x, final_data[day+1].Output, label='Photovoltaic Energy Produced',
+        axis.plot(x, dataframes[day+1].Output, label='Photovoltaic Energy Produced',
                     color='orange', fillstyle='bottom')
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
@@ -60,7 +67,6 @@ def create_figure(final_data, days):
             tick.label.set_fontsize(22) 
 
     return render_template(fig=fig)
-
 
 
 
