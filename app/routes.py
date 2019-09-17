@@ -6,7 +6,7 @@ from app.api_calls import *
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-session = ('day_dict': None)
+# session = ('day_dict': None)
 
 @app.route('/')
 @app.route('/dashboard', methods=['GET', 'POST'])
