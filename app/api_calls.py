@@ -417,7 +417,6 @@ def process(final_data, days, sunrise, sunset):
         day = day.to_json()
         listed.append(day)
 
-    
     return listed
 
 

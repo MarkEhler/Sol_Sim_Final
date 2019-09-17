@@ -26,9 +26,8 @@ def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     # if request.method == 'POST':
     # session.pop('listed', None)
-	listed = process(output, int(request.form['time_span']), sunrise, sunset)
-    session['listed'] = listed
-	return render_template('results.html', title='Sunny Day(s)') # , listed=listed
+	session['listed'] = process(output, int(request.form['time_span']), sunrise, sunset)
+	return render_template('results.html', title='Sunny Day(s)')
 
 
 @app.route('/plot.png', methods=['GET', 'POST'])
