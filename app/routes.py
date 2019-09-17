@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, Response
+from flask import render_template, flash, redirect, url_for, request, Response, session
 from app import app
 from app.forms import SimForm
 from app.api_calls import *
@@ -15,20 +15,22 @@ def form():
 		return redirect(url_for('results'))
 	return render_template('form.html', title='Check Yo Place!', form=form)
 
-@app.route('/about', methods=['GET', 'POST'])
+@app.route('/about')
 def about():
 	return render_template('about.html', title='About')
 
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-	day_dict = process(output, int(request.form['time_span']), sunrise, sunset)
-	return render_template('results.html', title=f'{request.form['time_span']} sunny day(s)') # , day_dict=day_dict
+    if request.method == 'POST':
+        session.pop('day_dict', None)
+	session['day_dict'] = process(output, int(request.form['time_span']), sunrise, sunset)
+	return render_template('results.html', title='Sunny Day(s)') # , day_dict=day_dict
 
 
 @app.route('/plot.png', methods=['GET', 'POST'])
 def plot_png():
-    fig = create_figure(day_dict, int(request.form['time_span']))
+    fig = create_figure(session['day_dict'], int(request.form['time_span']))
     FigureCanvas(fig).print_png(plot)
     return Response(plot.getvalue(), mimetype='image/png')
 

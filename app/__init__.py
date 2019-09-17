@@ -6,6 +6,6 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 bootstrap = Bootstrap(app)
-
+app.secret_key = os.urandom(24)
 
 from app import routes, errors
