@@ -23,7 +23,7 @@ def about():
 
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
-	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
+    output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     avg, daily_mean, hours_daylight = daily_mean(output)
     for i in range(7)
         session.pop(str(i), None)
@@ -50,6 +50,7 @@ def create_figure(session_obj):
     '''
 
     fig = Figure(figsize=(10,3*len(session_obj)))
+    x = x_axis_time_list
     x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in dataframes[1].index]
     for i in range(len(session_obj)):
         day = pd.read_json(session_obj[str(i)], typ='series')
