@@ -28,7 +28,7 @@ def handle_data():
     for i in range(7):
         session.pop(str(i), None)
     listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
-	for i in enumerate(listed):
+    for i in enumerate(listed):
         session[str(idx)] = i
     return render_template('results.html', title='Sunny Day(s)')
 
@@ -38,14 +38,14 @@ def plot_png():
     fig = create_figure(session)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+return Response(output.getvalue(), mimetype='image/png')
 
 # option to hard code time index for plot
 # remeber to subtract one from len of session object for the time
 def create_figure(session_obj):
-    '''
-    
-    '''
+'''
+
+'''
 
     fig = Figure(figsize=(10,3*len(session_obj)))
     x = x_axis_time_list
@@ -55,7 +55,7 @@ def create_figure(session_obj):
         day = day.sort_index()
         axis = fig.add_subplot(1, 1, 1)
         axis.plot(x, day, label='Photovoltaic Energy Produced',
-                    color='orange', fillstyle='bottom')
+                color='orange', fillstyle='bottom')
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
         axis.legend(loc='upper left')
@@ -64,7 +64,7 @@ def create_figure(session_obj):
             tick.label.set_fontsize(14) 
             tick.label.set_rotation('vertical')
         for tick in axis.yaxis.get_major_ticks():
-            tick.label.set_fontsize(22) 
+            tick.label.set_fontsize(22)
 
     return fig
 
