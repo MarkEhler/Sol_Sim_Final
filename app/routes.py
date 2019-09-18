@@ -38,7 +38,7 @@ def plot_png():
     fig = create_figure(session)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
-return Response(output.getvalue(), mimetype='image/png')
+    return Response(output.getvalue(), mimetype='image/png')
 
 # option to hard code time index for plot
 # remeber to subtract one from len of session object for the time
