@@ -382,66 +382,35 @@ def loop_data_collect(time_span, location, target_date = None):
 
 #  # Check Data vs Models stored in Static folder
 
-def process(final_data, days, sunrise, sunset):
-    '''
-    runs the returned data on the trained model.
-    each day returns a list of W/m^2 outputs which are then used to get some relavent information for the user:
-    daily totals.
-    '''
-    days = int(days)
-    cols = final_data.columns.to_list()
-    feature_cols = cols[:5] + cols[-1:]
-    model = os.path.join(os.getcwd(), 'app//static', 'final_model.pkl')
-    scaler = os.path.join(os.getcwd(), 'app//static', 'final_scaler.pkl')
-    loaded_day_model = pickle.load(open(model, 'rb'))
-    loaded_day_scaler = pickle.load(open(scaler, 'rb'))
 
-    sunrise_minutes = (convert_minutes(sunrise, forward=True, seconds=True) // 15)
-    sunset_minutes = (convert_minutes(sunset, forward=True, seconds=True) // 15)
-       
-    feats = final_data.loc[:,feature_cols]
-    features = loaded_day_scaler.transform(feats)
-    output = loaded_day_model.predict(features)
-#     because the government site the zenith angle was scraped from does not distingush between degrees above the horizon (+)
-#     and degrees below the horizon (-) there is a chance that some night time data will return a small positive number
-#     in the most up-to-date itteration there doesn't seem to be much of a need for this but still, for safety
-    output = output.clip(min=0)
-    final_data['Output'] = output
-
-    dayz = final_data.Day.unique()
-    listed = []
-    for day in dayz:
-        day = final_data[final_data.Day == day]
-#         day[:sunrise_minutes] = 0
-#         day[sunset_minutes:] = 0
-        day = day.to_json()
-        listed.append(day)
-
-    return listed
 
 
 
 # # Visualize Results
+ x_axis_time_list = ['00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15',
+'04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15', '08:30', '08:45', '09:00',
+'09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00',
+'14:15','14:30', '14:45', '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00', '18:15', '18:30', '18:45', '19:00',
+'19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15', '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45',]
 
-
-
-
-def daily_avg(results_series, sunrise, sunset):
+def daily_avg(output):
     '''
-    clips the model output array and gets a daily avg. caclulated in this way 
-    because there could be zero results during mid day which should be counted
+    finds the daily avg w/m^2, avg daily W/m^2hrs and hours of sunlight for each
     '''
     'consistently found that the first 30 minutes after dawn do not produce light'
     sunrise_minutes = convert_minutes(sunrise, forward=True, seconds=True)
     sunset_minutes = convert_minutes(sunset, forward=True, seconds=True)
-
-    results_array = np.array(results_series)
-    pre_dawn = int(round(sunrise_minutes/15,0))
-    after_dusk = int(round(sunset_minutes/15,0))
-    for_avg = results_array[pre_dawn:after_dusk]
-    avg = for_avg.mean()
-    mean_daily_produced = (for_avg/4)*avg
-    return avg, mean_daily_produced
+    dayz = final_data.Day.unique()
+    avg = []
+    mean_daily_produced = []
+    for day in dayz:
+        day = final_data[final_data.Day == day]
+        data = np.array(day.Output)
+        filtered = np.where(data > 0)
+        avg.append(filtered[0].mean())
+        hours = filtered[0]/4
+        mean_daily_produced.append(hours*avg)
+    return avg, mean_daily_produced, hours
 
 # # # # #
 

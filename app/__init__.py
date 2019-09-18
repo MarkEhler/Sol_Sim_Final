@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask # send_from_directory
 from config import Config
 from flask_bootstrap import Bootstrap
 import os

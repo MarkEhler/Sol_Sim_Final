@@ -24,35 +24,38 @@ def about():
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
 	output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-    # if request.method == 'POST':
-    # session.pop('listed', None)
-	session['listed'] = process(output, int(request.form['time_span']), sunrise, sunset)
-	return render_template('results.html', title='Sunny Day(s)')
+    avg, daily_mean, hours_daylight = daily_mean(output)
+    for i in range(7)
+        session.pop(str(i), None)
+	listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
+	for i in enumerate(listed):
+        session[str(idx)] = i
+    return render_template('results.html', title='Sunny Day(s)')
 
 
-@app.route('/plot.png', methods=['GET', 'POST'])
+@app.route('/plot.png')
 def plot_png():
-    fig = create_figure(session['listed'], int(request.form['time_span']))
-    FigureCanvas(fig).print_png(plot)
-    return Response(plot.getvalue(), mimetype='image/png')
+    fig = create_figure(session)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
-
-def create_figure(final_data, days):
+# option to hard code time index for plot
+# remeber to subtract one from len of session object for the time
+def create_figure(session_obj):
     '''
     takes a feature array and plots it against the time index and 
     time_span = days.unique
     converts minutes in integer form into into a clock reading for ease of translation
     '''
-    dataframes = []
-    for day in listed:
-        day = pd.read_json(day, orient='records')
+
+    fig = Figure(figsize=(10,3*len(session_obj)))
+    x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in dataframes[1].index]
+    for i in range(len(session_obj)):
+        day = pd.read_json(session_obj[str(i)], typ='series')
         day = day.sort_index()
-        dataframes.append(day)
-    fig = Figure(figsize=(30,15*days))
-    x = [convert_minutes(time, forward=False, seconds=False) for time in dataframes[1].index]
-    for day in range(days):
-        axis = fig.add_subplot(len(range(days)), 1, day+1) # mirror subplots in plot fx
-        axis.plot(x, dataframes[day+1].Output, label='Photovoltaic Energy Produced',
+        axis = fig.add_subplot(1, 1, 1)
+        axis.plot(x, day, label='Photovoltaic Energy Produced',
                     color='orange', fillstyle='bottom')
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
@@ -67,20 +70,43 @@ def create_figure(final_data, days):
     return render_template(fig=fig)
 
 
+def process(final_data, days, sunrise, sunset):
+    '''
+    runs the returned data on the trained model.
+    each day returns a list of W/m^2 outputs which are then used to get some relavent information for the user:
+    daily totals.
+    '''
+    days = int(days)
+    cols = final_data.columns.to_list()
+    feature_cols = cols[:5] + cols[-1:]
+    model = os.path.join(os.getcwd(), 'app//static', 'final_model.pkl')
+    scaler = os.path.join(os.getcwd(), 'app//static', 'final_scaler.pkl')
+    loaded_day_model = pickle.load(open(model, 'rb'))
+    loaded_day_scaler = pickle.load(open(scaler, 'rb'))
 
+    sunrise_minutes = (convert_minutes(sunrise, forward=True, seconds=True) // 15)
+    sunset_minutes = (convert_minutes(sunset, forward=True, seconds=True) // 15)
+       
+    feats = final_data.loc[:,feature_cols]
+    features = loaded_day_scaler.transform(feats)
+    output = loaded_day_model.predict(features)
+#     because the government site the zenith angle was scraped from does not distingush between degrees above the horizon (+)
+#     and degrees below the horizon (-) there is a chance that some night time data will return a small positive number
+#     in the most up-to-date itteration there doesn't seem to be much of a need for this but still, for safety
+    output = output.clip(min=0)
+    final_data['Output'] = output
 
-# def create_figure():
-#     fig = Figure()
-#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
-#     xs = [1,2,3,4]
-#     ys = [1,2,3,4]
-#     axis.scatter(xs, ys)
-#     return fig
-
-
-
-
-
+    dayz = final_data.Day.unique()
+    listed = []
+    times = list(output_copy.index)
+    for day in dayz:
+        day = final_data[final_data.Day == day]
+#         day[:sunrise_minutes] = 0
+#         day[sunset_minutes:] = 0
+        day = day['Output'].to_json()
+        listed.append(day)
+ 
+    return listed, time
 
 
 
@@ -96,6 +122,15 @@ def create_figure(final_data, days):
 
 
 
+
+
+# def create_figure():
+#     fig = Figure()
+#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
+#     xs = [1,2,3,4]
+#     ys = [1,2,3,4]
+#     axis.scatter(xs, ys)
+#     return fig
 
 
 
