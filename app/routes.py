@@ -25,7 +25,7 @@ def about():
 def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     avg, daily_mean, hours_daylight = daily_mean(output)
-    for i in range(7)
+    for i in range(7):
         session.pop(str(i), None)
 	listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
 	for i in enumerate(listed):
