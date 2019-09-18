@@ -27,7 +27,7 @@ def handle_data():
     avg, daily_mean, hours_daylight = daily_mean(output)
     for i in range(7):
         session.pop(str(i), None)
-	listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
+    listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
 	for i in enumerate(listed):
         session[str(idx)] = i
     return render_template('results.html', title='Sunny Day(s)')
@@ -44,9 +44,7 @@ def plot_png():
 # remeber to subtract one from len of session object for the time
 def create_figure(session_obj):
     '''
-    takes a feature array and plots it against the time index and 
-    time_span = days.unique
-    converts minutes in integer form into into a clock reading for ease of translation
+    
     '''
 
     fig = Figure(figsize=(10,3*len(session_obj)))
@@ -68,7 +66,7 @@ def create_figure(session_obj):
         for tick in axis.yaxis.get_major_ticks():
             tick.label.set_fontsize(22) 
 
-    return render_template(fig=fig)
+    return fig
 
 
 def process(final_data, days, sunrise, sunset):
