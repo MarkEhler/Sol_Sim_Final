@@ -43,10 +43,6 @@ return Response(output.getvalue(), mimetype='image/png')
 # option to hard code time index for plot
 # remeber to subtract one from len of session object for the time
 def create_figure(session_obj):
-'''
-
-'''
-
     fig = Figure(figsize=(10,3*len(session_obj)))
     x = x_axis_time_list
     x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in dataframes[1].index]
