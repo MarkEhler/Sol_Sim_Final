@@ -13,6 +13,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 @app.route('/dashboard', methods=['GET', 'POST'])
 def form():
 	form = SimForm()
+    print(len(session))
 	if form.validate_on_submit():
 		flash(f'Building graph for {form.time_span.data} days...')
 		return redirect(url_for('results'))
@@ -68,7 +69,7 @@ def create_figure(session_obj):
             tick.label.set_rotation(65)
         for tick in axis.yaxis.get_major_ticks():
             tick.label.set_fontsize(22)
-        counter += 1
+        # counter += 1
     return fig
 
 
