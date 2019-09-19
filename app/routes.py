@@ -27,6 +27,7 @@ def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     for i in range(7):
         session.pop(str(i), None)
+
     listed, session['time'], avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for idx, i in enumerate(listed):
         session[str(idx)] = i
@@ -47,11 +48,11 @@ def plot_png():
 def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
     times = json.loads(session_obj['time'])
-    print(times)
+    session.pop('time')
     for idx, i in enumerate(session_obj):
+        print(idx)
         day = pd.read_json(session_obj[str(idx)], typ='series')
         day = day.sort_index()
-        print(day)
         axis = fig.add_subplot(1, 1, 1)
         axis.plot(times, day, label='Photovoltaic Energy Produced',
                 color='orange', fillstyle='bottom')
