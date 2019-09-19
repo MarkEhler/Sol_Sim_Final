@@ -30,6 +30,7 @@ def handle_data():
     listed, session['time'], avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for idx, i in enumerate(listed):
         session[str(idx)] = i
+        print(idx)
             # avg, daily_mean, hours_daylight = daily_avg(output)
     return render_template('results.html', title='Sunny Day(s)', avgs=avgs)
 
@@ -47,8 +48,8 @@ def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
     times = json.loads(session_obj['time'])
     print(times)
-    for i in range(len(session_obj)):
-        day = pd.read_json(session_obj[str(i)], typ='series')
+    for idx, i in enumerate(session_obj):
+        day = pd.read_json(session_obj[str(idx)], typ='series')
         day = day.sort_index()
         print(day)
         axis = fig.add_subplot(1, 1, 1)
@@ -57,7 +58,7 @@ def create_figure(session_obj):
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
         axis.legend(loc='upper left')
-        axis.set_title(f'Day {day+1}', fontdict = {'fontsize' : 24}, loc= 'left')
+        axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 24}, loc= 'left')
         for tick in axis.xaxis.get_major_ticks():
             tick.label.set_fontsize(14) 
             tick.label.set_rotation('vertical')
