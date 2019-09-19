@@ -28,7 +28,7 @@ def handle_data():
     for i in range(7):
         session.pop(str(i), None)
     listed, session['time'], avgs = process(output, int(request.form['time_span']), sunrise, sunset)
-    for i in enumerate(listed):
+    for idx, i in enumerate(listed):
         session[str(idx)] = i
             # avg, daily_mean, hours_daylight = daily_avg(output)
     return render_template('results.html', title='Sunny Day(s)')
