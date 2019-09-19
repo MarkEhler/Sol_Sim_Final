@@ -48,7 +48,7 @@ def plot_png():
 def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
     times = json.loads(session_obj['time'])
-    counter = 0
+    counter = 1
     while counter < (len(session_obj) - 1):
         for idx, i in enumerate(session_obj):
             print(idx)
