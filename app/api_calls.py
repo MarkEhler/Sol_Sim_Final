@@ -393,8 +393,6 @@ def daily_avg(output):
     '''
     finds the daily avg w/m^2, avg daily W/m^2hrs and hours of sunlight for each
     '''
-    sunrise_minutes = convert_minutes(sunrise, forward=True, seconds=True)
-    sunset_minutes = convert_minutes(sunset, forward=True, seconds=True)
     dayz = output['Day'].unique()
     avg = []
     mean_daily_produced = []
