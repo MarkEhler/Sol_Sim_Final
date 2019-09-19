@@ -45,13 +45,14 @@ def plot_png():
 # remeber to subtract one from len of session object for the time
 def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
-    times = json.loads(session_obj['time']) # should be in json format and needs to be changed
-    x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in times]
+    times = json.loads(session_obj['time'])
+    print(times)
     for i in range(len(session_obj)):
         day = pd.read_json(session_obj[str(i)], typ='series')
         day = day.sort_index()
+        print(day)
         axis = fig.add_subplot(1, 1, 1)
-        axis.plot(x, day, label='Photovoltaic Energy Produced',
+        axis.plot(times, day, label='Photovoltaic Energy Produced',
                 color='orange', fillstyle='bottom')
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
         axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
