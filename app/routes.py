@@ -13,6 +13,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 @app.route('/dashboard', methods=['GET', 'POST'])
 def form():
     form = SimForm()
+    session.clear()
     print(len(session))
     if form.validate_on_submit():
         flash(f'Building graph for {form.time_span.data} days...')
@@ -26,14 +27,10 @@ def about():
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-    for i in range(7):
-        session.pop(str(i), None)
-    # session.pop('time', None)
     listed, avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for idx, i in enumerate(listed):
         session[str(idx)] = i
         print(idx)
-            # avg, daily_mean, hours_daylight = daily_avg(output)
     return render_template('results.html', title='Sunny Day(s)', avgs=avgs)
 
 
