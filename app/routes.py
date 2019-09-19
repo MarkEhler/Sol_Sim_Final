@@ -27,7 +27,7 @@ def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     for i in range(7):
         session.pop(str(i), None)
-    listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
+    listed, session['time'], avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for i in enumerate(listed):
         session[str(idx)] = i
             # avg, daily_mean, hours_daylight = daily_avg(output)
@@ -70,6 +70,7 @@ def process(final_data, days, sunrise, sunset):
     runs the returned data on the trained model.
     each day returns a list of W/m^2 outputs which are then used to get some relavent information for the user:
     daily totals.
+    returns a list of output values, a time_index session object, and a list of averages tuples
     '''
     days = int(days)
     cols = final_data.columns.to_list()
