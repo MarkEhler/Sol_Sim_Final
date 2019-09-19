@@ -57,12 +57,12 @@ def create_figure(session_obj):
         axis.plot(times, day, label='Photovoltaic Energy Produced',
                 color='orange', fillstyle='bottom')
         axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
-        axis.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
+        axis.set_ylabel('Watt per Square Meter of Panels', fontdict = {'fontsize' : 20})
         axis.legend(loc='upper left')
         axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 24}, loc= 'left')
         for tick in axis.xaxis.get_major_ticks():
-            tick.label.set_fontsize(14) 
-            tick.label.set_rotation('vertical')
+            tick.label.set_fontsize(8) 
+            tick.label.set_rotation(65)
         for tick in axis.yaxis.get_major_ticks():
             tick.label.set_fontsize(22)
     return fig
@@ -108,41 +108,3 @@ def process(final_data, days, sunrise, sunset):
         listed.append(day)
 
     return listed, times, averages
-
-
-
-
-
-# @app.route('/return-file/')
-# def get_images():
-#     return send_file('C://Users//Mark//Documents//DataSci//Module 5//FLASK//flask_dashboard//solar_dashboard//app//static//sun_plot2.png', attachment_filename = 'test')
-
-# @app.route('/file-download/')
-# def images():
-# 	return render_template("images.html")
-
-
-
-
-
-# def create_figure():
-#     fig = Figure()
-#     axis = fig.add_subplot(1, 1, 1) # mirror subplots in plot fx
-#     xs = [1,2,3,4]
-#     ys = [1,2,3,4]
-#     axis.scatter(xs, ys)
-#     return fig
-
-
-
-
-
-
-# @app.route('/plot')
-# def plot(chartID = 'chart_ID', chart_type = 'bar', chart_height = 350):
-# 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-# 	series = [{"name": 'Label1', "data": [1,2,3]}, {"name": 'Label2', "data": [4, 5, 6]}]
-# 	title = {"text": 'My Title'}
-# 	xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
-# 	yAxis = {"title": {"text": 'yAxis Label'}}
-# 	return render_template('plt.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
