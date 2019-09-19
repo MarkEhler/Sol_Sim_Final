@@ -25,12 +25,12 @@ def about():
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-    avg, daily_mean, hours_daylight = daily_avg(output)
     for i in range(7):
         session.pop(str(i), None)
     listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
     for i in enumerate(listed):
         session[str(idx)] = i
+            # avg, daily_mean, hours_daylight = daily_avg(output)
     return render_template('results.html', title='Sunny Day(s)')
 
 
@@ -92,16 +92,18 @@ def process(final_data, days, sunrise, sunset):
     final_data['Output'] = output
     dayz = final_data.Day.unique()
     listed = []
+    averages = []
     times = list(output_copy.index)
     times = json.dumps([convert_minutes(time, seconds=False) for time in times])
     for day in dayz:
         day = final_data[final_data.Day == day]
-#         day[:sunrise_minutes] = 0
-#         day[sunset_minutes:] = 0
+        #         day[:sunrise_minutes] = 0
+        #         day[sunset_minutes:] = 0
+        averages.append((daily_avg(day)))
         day = day['Output'].to_json()
         listed.append(day)
- 
-    return listed, times
+
+    return listed, times, averages
 
 
 
