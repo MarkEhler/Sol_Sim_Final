@@ -31,7 +31,7 @@ def handle_data():
     for idx, i in enumerate(listed):
         session[str(idx)] = i
             # avg, daily_mean, hours_daylight = daily_avg(output)
-    return render_template('results.html', title='Sunny Day(s)')
+    return render_template('results.html', title='Sunny Day(s)', avgs=avgs)
 
 
 @app.route('/plot.png')
