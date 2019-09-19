@@ -11,7 +11,7 @@ class SimForm(FlaskForm):
                         validators=[DataRequired(), Length(min=5, max=30)],
                         render_kw={'placeholder': '55555 Sleighbell St. Northpole, NP 00001'})
     date = DateField('Start Date', format = '%m/%d/%Y', description = 'Time',
-                        render_kw={'placeholder': 'please format: mm-dd-YYYY'},
+                        render_kw={'placeholder': 'Please format: mm-dd-YYYY'},
                         validators=[Length(min=10, max=10)]) 
     time_span = RadioField('Time Span', 
                         choices=[('1','1 day')], #,('3','3 days'), ('7', '7 days')

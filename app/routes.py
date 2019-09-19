@@ -27,7 +27,7 @@ def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
     for i in range(7):
         session.pop(str(i), None)
-
+    session.pop('time', None)
     listed, session['time'], avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for idx, i in enumerate(listed):
         session[str(idx)] = i
@@ -48,23 +48,25 @@ def plot_png():
 def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
     times = json.loads(session_obj['time'])
-    session.pop('time')
-    for idx, i in enumerate(session_obj):
-        print(idx)
-        day = pd.read_json(session_obj[str(idx)], typ='series')
-        day = day.sort_index()
-        axis = fig.add_subplot(1, 1, 1)
-        axis.plot(times, day, label='Photovoltaic Energy Produced',
-                color='orange', fillstyle='bottom')
-        axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
-        axis.set_ylabel('Watt per Square Meter of Panels', fontdict = {'fontsize' : 20})
-        axis.legend(loc='upper left')
-        axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 24}, loc= 'left')
-        for tick in axis.xaxis.get_major_ticks():
-            tick.label.set_fontsize(8) 
-            tick.label.set_rotation(65)
-        for tick in axis.yaxis.get_major_ticks():
-            tick.label.set_fontsize(22)
+    counter = 0
+    while counter < (len(session_obj) - 1):
+        for idx, i in enumerate(session_obj):
+            print(idx)
+            day = pd.read_json(session_obj[str(idx)], typ='series')
+            day = day.sort_index()
+            axis = fig.add_subplot(1, 1, 1)
+            axis.plot(times, day, label='Photovoltaic Energy Produced',
+                    color='orange', fillstyle='bottom')
+            axis.set_xlabel('Time', fontdict = {'fontsize' : 20})
+            axis.set_ylabel('Watt per Square Meter of Panels', fontdict = {'fontsize' : 20})
+            axis.legend(loc='upper left')
+            axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 24}, loc= 'left')
+            for tick in axis.xaxis.get_major_ticks():
+                tick.label.set_fontsize(8) 
+                tick.label.set_rotation(65)
+            for tick in axis.yaxis.get_major_ticks():
+                tick.label.set_fontsize(22)
+            counter += 1
     return fig
 
 
