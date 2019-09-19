@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, Response, 
 from app import app
 from app.forms import SimForm
 from app.api_calls import *
+import os, io, json
 # draw figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
@@ -44,8 +45,8 @@ def plot_png():
 # remeber to subtract one from len of session object for the time
 def create_figure(session_obj):
     fig = Figure(figsize=(10,3*len(session_obj)))
-    x = x_axis_time_list
-    x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in dataframes[1].index]
+    times = json.loads(session_obj['time']) # should be in json format and needs to be changed
+    x = [convert_minutes(session_obj['time'], forward=False, seconds=False) for time in times]
     for i in range(len(session_obj)):
         day = pd.read_json(session_obj[str(i)], typ='series')
         day = day.sort_index()
@@ -61,7 +62,6 @@ def create_figure(session_obj):
             tick.label.set_rotation('vertical')
         for tick in axis.yaxis.get_major_ticks():
             tick.label.set_fontsize(22)
-
     return fig
 
 
@@ -90,10 +90,10 @@ def process(final_data, days, sunrise, sunset):
 #     in the most up-to-date itteration there doesn't seem to be much of a need for this but still, for safety
     output = output.clip(min=0)
     final_data['Output'] = output
-
     dayz = final_data.Day.unique()
     listed = []
     times = list(output_copy.index)
+    times = json.dumps([convert_minutes(time, seconds=False) for time in times])
     for day in dayz:
         day = final_data[final_data.Day == day]
 #         day[:sunrise_minutes] = 0
@@ -101,7 +101,7 @@ def process(final_data, days, sunrise, sunset):
         day = day['Output'].to_json()
         listed.append(day)
  
-    return listed, time
+    return listed, times
 
 
 
