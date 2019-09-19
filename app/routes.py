@@ -93,8 +93,8 @@ def process(final_data, days, sunrise, sunset):
     dayz = final_data.Day.unique()
     listed = []
     averages = []
-    times = list(output_copy.index)
-    times = json.dumps([convert_minutes(time, seconds=False) for time in times])
+    times = list(final_data.index)
+    times = json.dumps([convert_minutes(time, seconds=False) for time in times[:96]])
     for day in dayz:
         day = final_data[final_data.Day == day]
         #         day[:sunrise_minutes] = 0
