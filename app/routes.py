@@ -25,7 +25,7 @@ def about():
 @app.route('/results', methods=['GET', 'POST'])
 def handle_data():
     output, sunrise, sunset = loop_data_collect(int(request.form['time_span']), request.form['location'], request.form['date'])
-    avg, daily_mean, hours_daylight = daily_mean(output)
+    avg, daily_mean, hours_daylight = daily_avg(output)
     for i in range(7):
         session.pop(str(i), None)
     listed, session['time'] = process(output, int(request.form['time_span']), sunrise, sunset)
