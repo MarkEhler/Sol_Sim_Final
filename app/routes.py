@@ -30,7 +30,7 @@ def handle_data():
     listed, avgs = process(output, int(request.form['time_span']), sunrise, sunset)
     for idx, i in enumerate(listed):
         session[str(idx)] = i
-        print(idx)
+    print(len(session))
     return render_template('results.html', title='Sunny Day(s)', avgs=avgs)
 
 
@@ -50,7 +50,7 @@ def create_figure(session_obj):
     print(times)
     # while counter < (len(session_obj)):
     for idx, i in enumerate(session_obj):
-        len(session_obj)
+        print(session_obj)
         print(idx)
         day = pd.read_json(session_obj[str(idx)], typ='series')
         day = day.sort_index()
