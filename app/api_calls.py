@@ -448,6 +448,8 @@ def create_figure(session_obj):
         axis.legend(loc='upper left')
         axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 14}, loc= 'left')
         plt.xticks(list(range(len(times))), ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"])
+        for label in axis.xaxis.get_licklabels()[::2]:
+            label.set_visible(False)
         for tick in axis.xaxis.get_major_ticks():
             tick.label.set_fontsize(8)
             tick.label.set_rotation(65)
