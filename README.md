@@ -3,11 +3,8 @@
 <ul>
     <li> app/ -- flask package files</li>
     <li> run.py -- init file for flask package </li>
-    <li> demo video place holder </li>
-    <li> </li>
-    <li> </li>
-    <li> </li>
-    <li> </li>
+    <li> <a href="https://youtu.be/MeP5QFYhSHY"> Demo Video </a> </li>
+
 </ul>
 <h2> Clearing the Cloudy Skies of Solar Energy </h2>
     Power is something we, as Americans take for granted.  "Where does it come from when I flip on the switch?" Isn't a question most of us think about, nor should we.  Our children don't have to think about the billion dollar industry that supplies them with air conditioned schools.  We ourselves have become addicted, not so much to screens, as the passage of electrons through our devices that lights them up.  It's no wonder that the energy debate is a polarizing one.
@@ -34,7 +31,7 @@ so reliable that astronomers can calculate where the great ball of fire will be 
        I learned on this project that my most accurate model upon initial training, which was accurate to 80 Watts per meter squared, produced downright wacky plots when tested against newly gathered data user input.<a href="https://imgur.com/wQ8AgxS"><img src="https://i.imgur.com/wQ8AgxS.png" title="wonky data" width="375" height="200", STYLE = "float: left;" /></a> <br>**Why was that?**<br>  Accuracy, as it turns out, isn't everything.  I found that my dataset could not possibly account for all the factors accounting for solar energy from entirely new locations.  In other words, my model had overfit.  As I slackened the accuracy by 15 - 20 Watts per meter squared I found that my plots looked a lot more reasonable.  What's more important, they still seemed responsive to the weather.  In the end I was able to reclaim this accuracy by fine tuning my data, not my parameters, a key lesson in garbage in garbage out.  The average error is resting at 77W/m^2 after 3 cross validations at the time of publishing. <br>
 <h3> The Sun Never Sleeps When it's Light Out </h3>
     I'm still suspicious of my final model and would like to revise it before shipping as a for-profit tool.  What I would expect would be a normal distribution of energy production.  The hours from 9am to 3pm are known to produce peak power for energy that tapers while the sun is rising and setting.  I had the solar equivalent of unhealthy self-body-image upon launching my tool below.<br>
-    <a href="https://imgur.com/QLlD4tR"><img src="https://i.imgur.com/GZuaz1N.png" title="first working plot" width="500" height="500", location = "right" /></a>
-    <a href="https://imgur.com/wF2MhIn"><img src="https://i.imgur.com/wF2MhIn.png" title="test site calendar" width="400" height="400", location = "left" /></a>
+    <a href="https://imgur.com/QLlD4tR"><img src="https://i.imgur.com/GZuaz1N.png" title="first working plot" width="85%", location = "right" /></a>
+    <a href="https://imgur.com/wF2MhIn"><img src="https://i.imgur.com/wF2MhIn.png" title="test site calendar" width="85%", location = "left" /></a>
     Above is a calendar from one of the test sites I used for sourcing my data.  The three lines represent different types of received solar radiation.  The one we are most concerned with is the red line. Knowing that I'm under reporting on weather data,  I'm left with the astronomy of the sun as my most important features.  I'm hard on myself but happy with this as a live app prototype.  My main goal with this project was to educate, so if the sim needs a little refinement I can easily work on it.  Rather, the focus should be on this apps ability to take complex astronomy and apply for practical use.  I should hope that the app will speak for itself in that regard.<br><br>
     The natural gas industry will boast that their fuel burning plants are reliable.  I would argue that the sun that has reliably powered life on this planet for eons will still be reliable even when the coal plants come tumbling down at the end of their shelf life. 

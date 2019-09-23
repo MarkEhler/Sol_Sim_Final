@@ -8,11 +8,11 @@ from wtforms import DateField
 class SimForm(FlaskForm):
 
     location = StringField('Address',
-                        validators=[DataRequired(), Length(min=5, max=30)],
-                        render_kw={'placeholder': '55555 Sleighbell St. Northpole, NP 00001'})
+                        validators=[DataRequired(), Length(min=5, max=30)], default="406 S. Union St. Burlington, VT 05401",
+                        render_kw={'placeholder': '55555 Sleighbell St. Northpole, NP 00001'}) # code in a default
     date = DateField('Start Date', format = '%m/%d/%Y', description = 'Time',
-                        render_kw={'placeholder': 'Please format: mm-dd-YYYY'},
-                        validators=[Length(min=10, max=10)]) 
+                        render_kw={'placeholder': 'Format: mm-dd-YYYY'}, default="06-20-2019"
+                        validators=[Length(min=10, max=10)]) #default date
     time_span = RadioField('Time Span', 
                         choices=[('1','1 day')], #,('3','3 days'), ('7', '7 days')
                         default= '1', validators=[DataRequired()]) 
