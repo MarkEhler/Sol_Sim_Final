@@ -235,7 +235,6 @@ def get_temp_log_daylight(df, lat, long, dark, time):
     return sunrise, sunset, df
 
 def get_solar_data(df, lat, long, date):
-
         #  SPA Calculator
     SPA_calc = 'https://midcdmz.nrel.gov/solpos/spa.html'
 
@@ -316,6 +315,7 @@ def get_solar_data(df, lat, long, date):
 # # Post processing
 
 def cleaning(df, sunrise, sunset):
+
     results = df.copy()
     sunrise_minutes = (convert_minutes(sunrise, forward=True, seconds=True) // 15) * 15
     sunset_minutes = (convert_minutes(sunset, forward=True, seconds=True) // 15) * 15
@@ -326,6 +326,7 @@ def cleaning(df, sunrise, sunset):
     return results
 # still need to make this mutable
 def reindexing(df, timezone=6):
+
     results = df.copy()
     results['Time Index'] = pd.to_datetime(results['Time Index'], unit='s')
     # time is six hours ahead because of timezone +6 GMT
@@ -343,8 +344,7 @@ def reindexing(df, timezone=6):
 def loop_data_collect(time_span, location, target_date = None):
     '''
     initializes data collection and handles all args/kwargs for collections
-    '''
-  
+    ''' 
     output = pd.DataFrame()
     time_span = int(time_span)
 
@@ -361,8 +361,7 @@ def loop_data_collect(time_span, location, target_date = None):
         results = get_minutes(results)
         results, lat, long = get_coordinates(location, results)
         sunrise, sunset, results = get_temp_log_daylight(results, lat, long, dark, time)
-        results = get_solar_data(results, lat, long, time_list)
-        
+        results = get_solar_data(results, lat, long, time_list)        
 #         clean data
         results['Day'] = i+1
         results.set_index('Minutes', inplace=True)
@@ -375,6 +374,7 @@ def loop_data_collect(time_span, location, target_date = None):
         cleaned_results = None
         print('♥‿♥')
         count += 1
+
     return output, sunrise, sunset
 
 def daily_avg(day):
@@ -386,6 +386,7 @@ def daily_avg(day):
     avg = (filtered[0].mean())
     hours = len(filtered[0])/4
     watt_hour = (hours*avg)
+
     return avg, hours, watt_hour
 
 # # # # #
@@ -433,30 +434,30 @@ def process(final_data, days, sunrise, sunset):
 
 
 def create_figure(session_obj):
-    with plt.sns()
-        fig = Figure(figsize=(10,5*len(session_obj)))
-        times = ["00:00", "00:15", "00:30", "00:45", "01:00", "01:15", "01:30", "01:45", "02:00", "02:15", "02:30", "02:45", "03:00", "03:15", "03:30", "03:45", "04:00", "04:15", "04:30", "04:45", "05:00", "05:15", "05:30", "05:45", "06:00", "06:15", "06:30", "06:45", "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00", "23:15", "23:30", "23:45"]
-        
-        print(times)
-        # while counter < (len(session_obj)):
-        for idx, i in enumerate(session_obj):
-            print(session_obj)
-            print(idx)
-            day = pd.read_json(session_obj[str(idx)], typ='series')
-            day = day.sort_index()
-            axis = fig.add_subplot(1, 1, 1)
-            axis.plot(times, day, label='Photovoltaic Energy Produced',
-                    color='orange', fillstyle='bottom')
-            axis.set_xlabel('Time', fontdict = {'fontsize' : 14})
-            axis.set_ylabel('Watts / Meter^2', fontdict = {'fontsize' : 14})
-            axis.legend(loc='upper left')
-            axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 14}, loc= 'left')
-            for tick in axis.xaxis.get_major_ticks():
-                tick.label.set_fontsize(8) 
-                tick.label.set_rotation(65)
-            for tick in axis.yaxis.get_major_ticks():
-                tick.label.set_fontsize(18)
-            # counter += 1
+
+    fig = Figure(figsize=(10,5*len(session_obj)))
+    times = ["00:00", "00:15", "00:30", "00:45", "01:00", "01:15", "01:30", "01:45", "02:00", "02:15", "02:30", "02:45", "03:00", "03:15", "03:30", "03:45", "04:00", "04:15", "04:30", "04:45", "05:00", "05:15", "05:30", "05:45", "06:00", "06:15", "06:30", "06:45", "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00", "23:15", "23:30", "23:45"]
+    
+    print(times)
+    # while counter < (len(session_obj)):
+    for idx, i in enumerate(session_obj):
+        print(session_obj)
+        print(idx)
+        day = pd.read_json(session_obj[str(idx)], typ='series')
+        day = day.sort_index()
+        axis = fig.add_subplot(1, 1, 1)
+        axis.plot(times, day, label='Photovoltaic Energy Produced',
+                color='orange', fillstyle='bottom')
+        axis.set_xlabel('Time', fontdict = {'fontsize' : 14})
+        axis.set_ylabel('Watts / Meter^2', fontdict = {'fontsize' : 14})
+        axis.legend(loc='upper left')
+        axis.set_title(f'Day {idx+1}', fontdict = {'fontsize' : 14}, loc= 'left')
+        for tick in axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(8) 
+            tick.label.set_rotation(65)
+        for tick in axis.yaxis.get_major_ticks():
+            tick.label.set_fontsize(18)
+
     return fig
 
 
@@ -473,7 +474,8 @@ def run_sim(time_span, location, date):
     day_dict = process(output, time_span, sunrise, sunset)
     mean_power = {}
     for day in range(time_span):
-        mean_power[day] = daily_avg(day_dict[day+1].Output, sunrise, sunset)   
+        mean_power[day] = daily_avg(day_dict[day+1].Output, sunrise, sunset)  
+
     return mean_power, day_dict
 
 # # # # #
