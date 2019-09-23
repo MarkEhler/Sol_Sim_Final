@@ -423,9 +423,6 @@ def process(final_data, days, sunrise, sunset):
     averages = []
     for day in dayz:
         day = final_data[final_data.Day == day]
-        for time in day[sunrise_minutes:sunset_minutes]:
-            if time < 9:
-                day[time] = random.randint(6,27)
         averages.append((daily_avg(day)))
         day = day['Output'].to_json()
         listed.append(day)
