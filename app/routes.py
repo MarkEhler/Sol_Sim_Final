@@ -7,13 +7,13 @@ import os, io, json
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-# session = ('listed': None)
-
 @app.route('/')
 @app.route('/dashboard', methods=['GET', 'POST'])
 def form():
     form = SimForm()
-    session.clear()
+    if request.method == 'GET':
+        session.clear()
+        print(len(session))
     print(len(session))
     if form.validate_on_submit():
         flash(f'Building graph for {form.time_span.data} days...')
