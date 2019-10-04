@@ -439,8 +439,8 @@ def create_figure(session_obj):
 
     for i,v in enumerate(range(number_of_subplots)):
         v = v+1
-        y = pd.read_json(session_obj[str(i), typ='series'])
-        y = y.sort_index
+        y = pd.read_json(session_obj[str(i)], typ='series')
+        y = y.sort_index()
         ax1 = fig.add_subplot(number_of_subplots,1,v)
         ax1.plot(x, y, label='Photovoltaic Energy Produced',
             color='orange', fillstyle='bottom')
