@@ -14,7 +14,7 @@ class SimForm(FlaskForm):
                         render_kw={'placeholder': 'Format: mm-dd-YYYY'},
                         validators=[Length(min=10, max=10)]) 
     time_span = RadioField('Time Span', 
-                        choices=[('1','1 day',('3','3 days'), ('7', '7 days'))],
+                        choices=[('1','1 day'),('3','3 days'), ('7', '7 days')],
                         default= '1', validators=[DataRequired()]) 
     submit = SubmitField('Run Simulation')
 
