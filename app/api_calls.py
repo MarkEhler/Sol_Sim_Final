@@ -449,7 +449,7 @@ def create_figure(session_obj):
         ax1.set_ylabel('W/m^2', fontdict = {'fontsize' : 20})
         ax1.legend(loc='upper left')
         ax1.set_title(f'Day {v}', fontdict = {'fontsize' : 24}, loc= 'left')
-        for label in axis.xaxis.get_ticklabels()[1::2]:
+        for label in ax1.xaxis.get_ticklabels()[1::2]:
             label.set_visible(False)
         for tick in ax1.xaxis.get_major_ticks():
             tick.label.set_fontsize(14) 
