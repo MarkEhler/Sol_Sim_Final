@@ -9,7 +9,7 @@ xgboost==0.90
 requests==2.22.0
 pandas==0.25.1
 pickleshare==0.7.5
-numpy==1.16.3
+numpy==1.22.0
 opencage==1.2
 selenium==3.141.0
 sklearn==0.0
